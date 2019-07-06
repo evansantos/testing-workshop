@@ -1,5 +1,20 @@
-test('isPasswordAllowed only allows some passwords', () => {
-  // here's where I'll demo things for you :)
+import {isPasswordAllowed, userToJSON} from '../auth'
+
+describe('isPasswordAllowed', () => {
+  const allowedPasswords = ['Bu3BsM!9^U6ydF?k', '_4#mn4hAy', '6"vapqW']
+  const disallowedPasswords = ['', '293841', 'alvxiv', '#.J@P']
+
+  allowedPasswords.forEach(pwd => {
+    it(`"${pwd}" expect to be allowed`, () => {
+      expect(isPasswordAllowed(pwd)).toBe(true)
+    })
+  })
+
+  disallowedPasswords.forEach(pwd => {
+    it(`"${pwd}" expect to be disallowed`, () => {
+      expect(isPasswordAllowed(pwd)).toBe(false)
+    })
+  })
 })
 
 test('userToJSON excludes secure properties', () => {
@@ -22,6 +37,21 @@ test('userToJSON excludes secure properties', () => {
   //   hash: 'some really long string',
   //   salt: 'some shorter string',
   // }
+  const user = {
+    id: 'some-id',
+    username: 'sarah',
+    exp: new Date(),
+    iat: new Date(),
+    hash: 'some really long string',
+    salt: 'some shorter string',
+  }
+
+  const schema = {
+    id: expect.any(String),
+    username: expect.any(String),
+  }
+
+  expect(userToJSON(user)).toEqual(schema)
 })
 
 //////// Elaboration & Feedback /////////
@@ -33,8 +63,8 @@ test('userToJSON excludes secure properties', () => {
 /*
 http://ws.kcd.im/?ws=Testing&e=auth%20util&em=
 */
-test.skip('I submitted my elaboration and feedback', () => {
-  const submitted = false // change this when you've submitted!
+test('I submitted my elaboration and feedback', () => {
+  const submitted = true // change this when you've submitted!
   expect(submitted).toBe(true)
 })
 ////////////////////////////////
