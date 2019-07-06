@@ -34,6 +34,21 @@ const safeUser = u => omit(u, ['salt', 'hash'])
 
 beforeEach(() => initDb())
 
+test('getUsers returns all the users in database', async () => {
+  const { req, res } = setup();
+
+  await usersController.getUsers(req, res)
+
+  expect(res.json).toHaveBeenCalledTimes(1)
+  const firstCall = res.json.mock.calls[0]
+  const firstArg = firstCall[0]
+  const {users} = firstArg
+  expect(users).not.toBeNull()
+  
+  const actualUsers = await db.getUsers()
+  expect(users).toEqual(actualUsers.map(safeUser))
+})
+
 test('getUser returns the specific user', async () => {
   const testUser = await db.insertUser(generate.userData())
   const {res, req} = setup()

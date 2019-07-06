@@ -61,5 +61,19 @@ async function updatePost(req, res) {
 // 4. Delete the post
 // 5. Finally send the json for the deleted post
 // Don't forget! It needs to be an async function, and you need to add it to the list of exports below.
+async function deletePost(req, res) {
+  const post = await db.getPost(req.params.id)
 
-export {authorize, getPosts, getPost, createPost, updatePost}
+  if (!post) {
+    return res.status(404).send()
+  }
+
+  if (!req.user || req.user.id !== post.authorId) {
+    return res.status(403).send()
+  }
+  
+  const deletedPost = await db.deletePost(req.params.id)
+  return res.json({post: deletedPost})
+}
+
+export {authorize, getPosts, getPost, createPost, updatePost, deletePost }

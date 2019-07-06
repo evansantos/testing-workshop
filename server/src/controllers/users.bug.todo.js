@@ -15,7 +15,7 @@ async function getUsers(req, res) {
     // There's a bug here 🐛
     // You might appreciate the userToJSON function
     // we're importing from utils/auth :)
-    return res.json({users})
+    return res.json({ users: users.map( user => userToJSON(user))})
   } else {
     return res.status(404).send()
   }
